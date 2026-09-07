@@ -1,0 +1,1536 @@
+openapi: 3.0.3
+info:
+  title: Sendwithus API
+  description: |
+    Unofficial OpenAPI specification for the [Sendwithus](https://www.sendwithus.com) transactional email API.
+
+    The Sendwithus API is based on the REST paradigm, featuring resource-based URLs
+    with standard HTTP response codes to indicate errors. All responses are JSON formatted.
+
+    Test API keys are included with all accounts. Requests made with test keys handle data
+    and return responses but do not actually send emails.
+  version: 1.0.0
+  contact:
+    name: Process Street
+    url: https://github.com/process-street/sendwithus-openapi
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.sendwithus.com/api/v1
+    description: Production
+
+security:
+  - basicAuth: []
+
+tags:
+  - name: Templates
+    description: Manage email templates, versions, and locales.
+  - name: Send
+    description: Send transactional emails.
+  - name: Render
+    description: Render a template with data without sending.
+  - name: Logs
+    description: Retrieve email send logs and events.
+  - name: Snippets
+    description: Manage reusable content snippets.
+  - name: Customers
+    description: Manage customer records and their email logs.
+  - name: Drip Campaigns
+    description: Manage drip campaign activations and deactivations.
+  - name: i18n
+    description: Internationalization — download translation packages and upload translated strings.
+  - name: Batch
+    description: Execute multiple API calls in a single HTTP request.
+
+paths:
+  # ── Templates ──────────────────────────────────────────────────────────
+  /templates:
+    get:
+      operationId: listTemplates
+      summary: Get a list of templates
+      tags: [Templates]
+      responses:
+        '200':
+          description: A list of templates.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateSummary'
+
+    post:
+      operationId: createTemplate
+      summary: Create a new template
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemplateRequest'
+      responses:
+        '200':
+          description: Template created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTemplateResponse'
+
+  /templates/{template_id}:
+    parameters:
+      - $ref: '#/components/parameters/TemplateId'
+
+    get:
+      operationId: getTemplate
+      summary: Get a specific template (all versions)
+      tags: [Templates]
+      responses:
+        '200':
+          description: Template details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateSummary'
+
+    put:
+      operationId: updateTemplate
+      summary: Update a specific template
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTemplateRequest'
+      responses:
+        '200':
+          description: Template updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+    delete:
+      operationId: deleteTemplate
+      summary: Delete a specific template
+      description: All versions and locales will be deleted.
+      tags: [Templates]
+      responses:
+        '200':
+          description: Template deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /templates/{template_id}/locales/{locale}:
+    parameters:
+      - $ref: '#/components/parameters/TemplateId'
+      - $ref: '#/components/parameters/Locale'
+
+    get:
+      operationId: getTemplateByLocale
+      summary: Get a specific template by locale
+      tags: [Templates]
+      responses:
+        '200':
+          description: Template details for the specified locale.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateSummary'
+
+    put:
+      operationId: updateTemplateByLocale
+      summary: Update a specific template by locale
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTemplateRequest'
+      responses:
+        '200':
+          description: Template updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+    delete:
+      operationId: deleteTemplateLocale
+      summary: Delete a specific template locale
+      tags: [Templates]
+      responses:
+        '200':
+          description: Template locale deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /templates/{template_id}/locales:
+    parameters:
+      - $ref: '#/components/parameters/TemplateId'
+
+    post:
+      operationId: addTemplateLocale
+      summary: Add a locale to an existing template
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddLocaleRequest'
+      responses:
+        '200':
+          description: Locale added.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddLocaleResponse'
+
+  /templates/{template_id}/versions:
+    parameters:
+      - $ref: '#/components/parameters/TemplateId'
+
+    get:
+      operationId: listTemplateVersions
+      summary: Get a list of template versions (with HTML/text)
+      tags: [Templates]
+      responses:
+        '200':
+          description: List of template versions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateVersion'
+
+    post:
+      operationId: createTemplateVersion
+      summary: Create a new template version
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemplateVersionRequest'
+      responses:
+        '200':
+          description: Template version created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateVersion'
+
+  /templates/{template_id}/locales/{locale}/versions:
+    parameters:
+      - $ref: '#/components/parameters/TemplateId'
+      - $ref: '#/components/parameters/Locale'
+
+    get:
+      operationId: listTemplateVersionsByLocale
+      summary: Get a list of template versions by locale
+      tags: [Templates]
+      responses:
+        '200':
+          description: List of template versions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateVersion'
+
+    post:
+      operationId: createTemplateVersionByLocale
+      summary: Create a new template version for a specific locale
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemplateVersionRequest'
+      responses:
+        '200':
+          description: Template version created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateVersion'
+
+  /templates/{template_id}/versions/{version_id}:
+    parameters:
+      - $ref: '#/components/parameters/TemplateId'
+      - $ref: '#/components/parameters/VersionId'
+
+    get:
+      operationId: getTemplateVersion
+      summary: Get a specific template version (with HTML/text)
+      tags: [Templates]
+      responses:
+        '200':
+          description: Template version details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateVersion'
+
+    put:
+      operationId: updateTemplateVersion
+      summary: Update a template version
+      description: Replaces the current version of the specified template.
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTemplateVersionRequest'
+      responses:
+        '200':
+          description: Template version updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateVersion'
+
+  /templates/{template_id}/locales/{locale}/versions/{version_id}:
+    parameters:
+      - $ref: '#/components/parameters/TemplateId'
+      - $ref: '#/components/parameters/Locale'
+      - $ref: '#/components/parameters/VersionId'
+
+    get:
+      operationId: getTemplateVersionByLocale
+      summary: Get a specific template version by locale
+      tags: [Templates]
+      responses:
+        '200':
+          description: Template version details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateVersion'
+
+    put:
+      operationId: updateTemplateVersionByLocale
+      summary: Update a template version by locale
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTemplateVersionRequest'
+      responses:
+        '200':
+          description: Template version updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateVersion'
+
+  # ── Send ───────────────────────────────────────────────────────────────
+  /send:
+    post:
+      operationId: sendEmail
+      summary: Send an email
+      description: |
+        Send a transactional email using a template. If a customer does not exist
+        for the specified recipient email, one will be created automatically.
+      tags: [Send]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendRequest'
+      responses:
+        '200':
+          description: Email sent successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendResponse'
+
+  # ── Render ─────────────────────────────────────────────────────────────
+  /render:
+    post:
+      operationId: renderTemplate
+      summary: Render a template with data
+      description: |
+        Renders a template with the provided data using the same rendering
+        workflow Sendwithus uses for delivery, without actually sending an email.
+      tags: [Render]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenderRequest'
+      responses:
+        '200':
+          description: Rendered template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RenderResponse'
+
+  # ── Logs ───────────────────────────────────────────────────────────────
+  /logs/{log_id}:
+    parameters:
+      - $ref: '#/components/parameters/LogId'
+
+    get:
+      operationId: getLog
+      summary: Get a specific log and its metadata
+      tags: [Logs]
+      responses:
+        '200':
+          description: Log details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+
+  /logs/{log_id}/events:
+    parameters:
+      - $ref: '#/components/parameters/LogId'
+
+    get:
+      operationId: getLogEvents
+      summary: Retrieve events for a specific log
+      tags: [Logs]
+      responses:
+        '200':
+          description: List of events for the log.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogEvent'
+
+  /resend:
+    post:
+      operationId: resendEmail
+      summary: Resend an existing email by log id
+      tags: [Logs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [log_id]
+              properties:
+                log_id:
+                  type: string
+                  description: The log id of the email to resend.
+                  example: log_asdf123456qwerty
+      responses:
+        '200':
+          description: Email resent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendResponse'
+
+  # ── Snippets ───────────────────────────────────────────────────────────
+  /snippets:
+    get:
+      operationId: listSnippets
+      summary: Get all snippets
+      tags: [Snippets]
+      responses:
+        '200':
+          description: List of snippets.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Snippet'
+
+    post:
+      operationId: createSnippet
+      summary: Create a new snippet
+      tags: [Snippets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnippetBody'
+      responses:
+        '200':
+          description: Snippet created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnippetResponse'
+
+  /snippets/{snippet_id}:
+    parameters:
+      - $ref: '#/components/parameters/SnippetId'
+
+    get:
+      operationId: getSnippet
+      summary: Get a specific snippet
+      tags: [Snippets]
+      responses:
+        '200':
+          description: Snippet details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Snippet'
+
+    put:
+      operationId: updateSnippet
+      summary: Update an existing snippet
+      tags: [Snippets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnippetBody'
+      responses:
+        '200':
+          description: Snippet updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnippetResponse'
+
+    delete:
+      operationId: deleteSnippet
+      summary: Delete an existing snippet
+      tags: [Snippets]
+      responses:
+        '200':
+          description: Snippet deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ── Customers ──────────────────────────────────────────────────────────
+  /customers:
+    post:
+      operationId: createOrUpdateCustomer
+      summary: Create or update a customer
+      tags: [Customers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email address (key) of the customer.
+                locale:
+                  type: string
+                  description: Locale for this customer (e.g. de-DE).
+      responses:
+        '200':
+          description: Customer created or updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /customers/{email}:
+    parameters:
+      - $ref: '#/components/parameters/CustomerEmail'
+
+    get:
+      operationId: getCustomer
+      summary: Get a specific customer
+      tags: [Customers]
+      responses:
+        '200':
+          description: Customer details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+
+    delete:
+      operationId: deleteCustomer
+      summary: Delete a customer
+      description: |
+        Deleting a customer will **not** remove any pending scheduled drip campaign
+        emails. Use the drip campaign deactivation endpoint to prevent those.
+      tags: [Customers]
+      responses:
+        '200':
+          description: Customer deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /customers/{email}/logs:
+    parameters:
+      - $ref: '#/components/parameters/CustomerEmail'
+
+    get:
+      operationId: getCustomerLogs
+      summary: Get email logs for a customer
+      tags: [Customers]
+      parameters:
+        - name: count
+          in: query
+          description: Number of logs to return (1-100). Defaults to 100.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+        - name: created_lt
+          in: query
+          description: Unix timestamp; return logs created before this time.
+          schema:
+            type: integer
+        - name: created_gt
+          in: query
+          description: Unix timestamp; return logs created after this time.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Customer email logs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLogsResponse'
+
+  # ── Drip Campaigns ────────────────────────────────────────────────────
+  /drip_campaigns:
+    get:
+      operationId: listDripCampaigns
+      summary: Get a list of drip campaigns
+      tags: [Drip Campaigns]
+      responses:
+        '200':
+          description: List of drip campaigns.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DripCampaign'
+
+  /drip_campaigns/{drip_campaign_id}:
+    parameters:
+      - $ref: '#/components/parameters/DripCampaignId'
+
+    get:
+      operationId: getDripCampaign
+      summary: Get details of a specific drip campaign
+      tags: [Drip Campaigns]
+      responses:
+        '200':
+          description: Drip campaign details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DripCampaign'
+
+  /drip_campaigns/{drip_campaign_id}/activate:
+    parameters:
+      - $ref: '#/components/parameters/DripCampaignId'
+
+    post:
+      operationId: activateDripCampaign
+      summary: Activate a drip campaign for a customer
+      description: |
+        Adds the specified customer to the first step of the drip campaign.
+        If the first step has a delay, the first email sends after that delay elapses.
+      tags: [Drip Campaigns]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DripActivateRequest'
+      responses:
+        '200':
+          description: Customer added to drip campaign.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DripActivateResponse'
+
+  /drip_campaigns/{drip_campaign_id}/deactivate:
+    parameters:
+      - $ref: '#/components/parameters/DripCampaignId'
+
+    post:
+      operationId: deactivateDripCampaign
+      summary: Deactivate a drip campaign for a customer
+      tags: [Drip Campaigns]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipient_address]
+              properties:
+                recipient_address:
+                  type: string
+                  format: email
+                  description: Email address of the customer to remove.
+      responses:
+        '200':
+          description: Customer removed from drip campaign.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DripDeactivateResponse'
+
+  /drip_campaigns/deactivate:
+    post:
+      operationId: deactivateAllDripCampaigns
+      summary: Deactivate a customer from all drip campaigns
+      description: |
+        Removes the specified email address from all active drip campaigns.
+        Useful when a user unsubscribes, changes email addresses, or cancels.
+      tags: [Drip Campaigns]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipient_address]
+              properties:
+                recipient_address:
+                  type: string
+                  format: email
+                  description: Email address to deactivate from all campaigns.
+      responses:
+        '200':
+          description: Customer deactivated from all campaigns.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  status:
+                    type: string
+                  recipient_address:
+                    type: string
+
+  # ── i18n ───────────────────────────────────────────────────────────────
+  /i18n/pot/{tag}:
+    parameters:
+      - name: tag
+        in: path
+        required: true
+        description: Tag applied to the templates to generate the .pot file for.
+        schema:
+          type: string
+
+    get:
+      operationId: getTranslationPackage
+      summary: Download a .pot translation package
+      description: |
+        Fetches a .pot translation package for all templates assigned the
+        specified tag. Tags can be set via the Sendwithus dashboard.
+      tags: [i18n]
+      responses:
+        '200':
+          description: A valid .pot file.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /i18n/po/{tag}:
+    parameters:
+      - name: tag
+        in: path
+        required: true
+        description: Tag applied to the templates to generate locales for.
+        schema:
+          type: string
+
+    post:
+      operationId: uploadTranslations
+      summary: Upload translated .po files
+      description: |
+        POST a .zip file containing .po files. Each .po file should be named
+        to match the locale it is intended for (e.g. fr-FR.po, ja-JP.po).
+        Templates with the specified tag will have a locale generated for each
+        .po file in the archive.
+      tags: [i18n]
+      requestBody:
+        required: true
+        content:
+          application/zip:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Translations uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ── Batch ──────────────────────────────────────────────────────────────
+  /batch:
+    post:
+      operationId: batchRequests
+      summary: Execute multiple API calls in one request
+      description: Batch sizes over 10 requests are not recommended.
+      tags: [Batch]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/BatchItem'
+      responses:
+        '200':
+          description: Batch results returned in the same order as requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BatchResult'
+
+# ═══════════════════════════════════════════════════════════════════════════
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        Use your Sendwithus API key as the username with an empty password.
+        Example: `-u live_1234qwerzxcv7890:`
+
+  parameters:
+    TemplateId:
+      name: template_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The template's unique identifier.
+
+    VersionId:
+      name: version_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The template version's unique identifier.
+
+    Locale:
+      name: locale
+      in: path
+      required: true
+      schema:
+        type: string
+      description: IETF locale code (e.g. en-US, fr-FR).
+
+    LogId:
+      name: log_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The log entry's unique identifier.
+
+    SnippetId:
+      name: snippet_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The snippet's unique identifier.
+
+    CustomerEmail:
+      name: email
+      in: path
+      required: true
+      schema:
+        type: string
+        format: email
+      description: The customer's email address.
+
+    DripCampaignId:
+      name: drip_campaign_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The drip campaign's unique identifier.
+
+  schemas:
+    # ── Generic ────────────────────────────────────────────────────────
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        status:
+          type: string
+          example: OK
+
+    # ── Templates ──────────────────────────────────────────────────────
+    VersionSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ver_rmU8gMtRTYpwQcpYaPnB5p
+        name:
+          type: string
+          example: Version Name
+        published:
+          type: boolean
+        created:
+          description: Unix timestamp or ISO string.
+          oneOf:
+            - type: integer
+            - type: string
+        modified:
+          description: Unix timestamp or ISO string.
+          oneOf:
+            - type: integer
+            - type: string
+
+    TemplateSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          example: tem_hQf1VnmCNrPjBdYQPOpLZ9
+        name:
+          type: string
+          example: Template Name
+        locale:
+          type: string
+          example: en-US
+        created:
+          type: integer
+          description: Unix timestamp.
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VersionSummary'
+        tags:
+          type: array
+          items:
+            type: string
+
+    TemplateVersion:
+      type: object
+      properties:
+        id:
+          type: string
+        created:
+          type: integer
+        modified:
+          type: integer
+        published:
+          type: boolean
+        name:
+          type: string
+        html:
+          type: string
+        text:
+          type: string
+        subject:
+          type: string
+        preheader:
+          type: string
+        amp_html:
+          type: string
+        template_data:
+          type: object
+          additionalProperties: true
+
+    CreateTemplateRequest:
+      type: object
+      required: [name, subject]
+      properties:
+        name:
+          type: string
+          description: The name of the template.
+        subject:
+          type: string
+          description: The subject line of the template.
+        preheader:
+          type: string
+        html:
+          type: string
+          description: The HTML body (at least one of html or text required).
+        text:
+          type: string
+          description: The plain-text body (at least one of html or text required).
+        amp_html:
+          type: string
+          description: The AMP HTML body.
+        template_data:
+          type: object
+          additionalProperties: true
+          description: Sample data for the template.
+        locale:
+          type: string
+          default: en-US
+        tags:
+          type: array
+          maxItems: 3
+          items:
+            type: string
+
+    CreateTemplateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        locale:
+          type: string
+        name:
+          type: string
+
+    UpdateTemplateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        tags:
+          type: array
+          maxItems: 3
+          items:
+            type: string
+          description: Replaces existing tags. Pass [] to clear.
+
+    AddLocaleRequest:
+      type: object
+      required: [name, subject, locale]
+      properties:
+        name:
+          type: string
+          description: Name of the initial version.
+        subject:
+          type: string
+        locale:
+          type: string
+          description: IETF locale code for the new locale.
+        html:
+          type: string
+        text:
+          type: string
+
+    AddLocaleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        locale:
+          type: string
+        name:
+          type: string
+        version_id:
+          type: string
+
+    CreateTemplateVersionRequest:
+      type: object
+      required: [name, subject]
+      properties:
+        name:
+          type: string
+        subject:
+          type: string
+        preheader:
+          type: string
+        html:
+          type: string
+        text:
+          type: string
+        amp_html:
+          type: string
+        template_data:
+          type: object
+          additionalProperties: true
+        locale:
+          type: string
+
+    UpdateTemplateVersionRequest:
+      type: object
+      required: [name, subject]
+      properties:
+        name:
+          type: string
+        subject:
+          type: string
+        preheader:
+          type: string
+        html:
+          type: string
+          description: At least one of html or text must be specified.
+        text:
+          type: string
+          description: At least one of html or text must be specified.
+        amp_html:
+          type: string
+        template_data:
+          type: object
+          additionalProperties: true
+
+    # ── Send ───────────────────────────────────────────────────────────
+    EmailRecipient:
+      type: object
+      required: [address]
+      properties:
+        address:
+          type: string
+          format: email
+        name:
+          type: string
+
+    EmailSender:
+      type: object
+      required: [address]
+      properties:
+        address:
+          type: string
+          format: email
+        name:
+          type: string
+        reply_to:
+          type: string
+          format: email
+
+    FileAttachment:
+      type: object
+      required: [id, data]
+      properties:
+        id:
+          type: string
+          description: Filename for the attachment.
+          example: doc.txt
+        data:
+          type: string
+          description: Base64-encoded file data.
+
+    SendRequest:
+      type: object
+      required: [template, recipient]
+      properties:
+        template:
+          type: string
+          description: Template ID to send.
+        recipient:
+          $ref: '#/components/schemas/EmailRecipient'
+        cc:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailRecipient'
+        bcc:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailRecipient'
+        sender:
+          $ref: '#/components/schemas/EmailSender'
+        template_data:
+          type: object
+          additionalProperties: true
+          description: Template data (maximum 128KB).
+        tags:
+          type: array
+          items:
+            type: string
+          description: Passed to your ESP as Categories/Tags.
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          description: Custom SMTP headers.
+        inline:
+          $ref: '#/components/schemas/FileAttachment'
+        files:
+          type: array
+          description: File attachments (combined maximum 7MB).
+          items:
+            $ref: '#/components/schemas/FileAttachment'
+        esp_account:
+          type: string
+          description: ESP Account ID to route through.
+          example: esp_1a2b3c4d5e
+        locale:
+          type: string
+          description: Template locale to send (e.g. en-US).
+        version_name:
+          type: string
+          description: Template version name (overrides A/B tests).
+
+    SendResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        status:
+          type: string
+        receipt_id:
+          type: string
+          example: log_asdf1234qwerty
+        email:
+          type: object
+          properties:
+            name:
+              type: string
+            version_name:
+              type: string
+            locale:
+              type: string
+
+    # ── Render ─────────────────────────────────────────────────────────
+    RenderRequest:
+      type: object
+      required: [template, template_data]
+      properties:
+        template:
+          type: string
+          description: Template ID.
+        template_data:
+          type: object
+          additionalProperties: true
+        version_id:
+          type: string
+        version_name:
+          type: string
+          description: Provide either version_name or version_id, not both.
+        locale:
+          type: string
+        strict:
+          type: boolean
+          description: Fail on missing template data when true.
+
+    RenderResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        status:
+          type: string
+        template:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            version_name:
+              type: string
+            locale:
+              type: string
+        subject:
+          type: string
+        html:
+          type: string
+        text:
+          type: string
+
+    # ── Logs ───────────────────────────────────────────────────────────
+    Log:
+      type: object
+      properties:
+        object:
+          type: string
+          example: log
+        id:
+          type: string
+          example: log_asdf1234qwerty
+        created:
+          type: integer
+        recipient_name:
+          type: string
+        recipient_address:
+          type: string
+          format: email
+        status:
+          type: string
+          enum:
+            - requested
+            - triggered
+            - queued
+            - sent
+            - clicked
+            - re_clicked
+            - opened
+            - re_opened
+            - failed_to_queue
+            - failed_to_send
+            - processed
+            - dropped
+            - delivered
+            - deferred
+            - bounced
+            - reported_as_spam
+            - unsubscribed
+        message:
+          type: string
+        email_id:
+          type: string
+        email_name:
+          type: string
+        email_version:
+          type: string
+
+    LogEvent:
+      type: object
+      properties:
+        object:
+          type: string
+          example: event
+        created:
+          type: integer
+        type:
+          type: string
+        message:
+          type: string
+
+    # ── Snippets ───────────────────────────────────────────────────────
+    Snippet:
+      type: object
+      properties:
+        object:
+          type: string
+          example: snippet
+        id:
+          type: string
+          example: snp_Q33jTLFc2ayG9KrF2Vcm4F
+        name:
+          type: string
+        body:
+          type: string
+        created:
+          type: integer
+        modified:
+          type: integer
+
+    SnippetBody:
+      type: object
+      required: [name, body]
+      properties:
+        name:
+          type: string
+        body:
+          type: string
+
+    SnippetResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        status:
+          type: string
+        snippet:
+          $ref: '#/components/schemas/Snippet'
+
+    # ── Customers ──────────────────────────────────────────────────────
+    Customer:
+      type: object
+      properties:
+        object:
+          type: string
+          example: customer
+        email:
+          type: string
+          format: email
+        created:
+          type: integer
+        locale:
+          type: string
+
+    CustomerResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        status:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+
+    CustomerLogsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        status:
+          type: string
+        logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Log'
+
+    # ── Drip Campaigns ─────────────────────────────────────────────────
+    DripStep:
+      type: object
+      properties:
+        object:
+          type: string
+          example: drip_step
+        id:
+          type: string
+        email_id:
+          type: string
+        delay_seconds:
+          type: string
+          description: Delay in seconds before this step sends.
+
+    DripCampaign:
+      type: object
+      properties:
+        object:
+          type: string
+          example: drip_campaign
+        id:
+          type: string
+        name:
+          type: string
+        enabled:
+          type: boolean
+        trigger_email_id:
+          type: string
+          nullable: true
+        drip_steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/DripStep'
+
+    DripActivateRequest:
+      type: object
+      required: [recipient]
+      properties:
+        recipient:
+          $ref: '#/components/schemas/EmailRecipient'
+        cc:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailRecipient'
+        bcc:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailRecipient'
+        sender:
+          $ref: '#/components/schemas/EmailSender'
+        email_data:
+          type: object
+          additionalProperties: true
+          description: Data merged into every email in the campaign.
+        tags:
+          type: array
+          items:
+            type: string
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        esp_account:
+          type: string
+        locale:
+          type: string
+
+    DripActivateResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        status:
+          type: string
+        drip_campaign:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        recipient_address:
+          type: string
+        message:
+          type: string
+
+    DripDeactivateResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        status:
+          type: string
+        drip_campaign:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        recipient_address:
+          type: string
+        message:
+          type: string
+
+    # ── Batch ──────────────────────────────────────────────────────────
+    BatchItem:
+      type: object
+      required: [path, method]
+      properties:
+        path:
+          type: string
+          description: API path to call (e.g. /api/v1/send).
+          example: /api/v1/send
+        method:
+          type: string
+          enum: [GET, POST, PUT, DELETE]
+          description: HTTP method.
+        body:
+          type: object
+          additionalProperties: true
+          description: Request body for the API call.
+
+    BatchResult:
+      type: object
+      properties:
+        path:
+          type: string
+        status_code:
+          type: integer
+        method:
+          type: string
+        body:
+          description: Response body (object on success, string on error).
+          oneOf:
+            - type: object
+              additionalProperties: true
+            - type: string
