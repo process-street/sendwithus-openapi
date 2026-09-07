@@ -925,6 +925,12 @@ paths:
                 locale:
                   type: string
                   description: Locale for this customer (e.g. de-DE).
+                data:
+                  type: object
+                  additionalProperties: true
+                  description: |
+                    Arbitrary customer data. Not documented in the public API
+                    reference but accepted by the API and used by the Python SDK.
       responses:
         '200':
           description: Customer created or updated.
@@ -1245,6 +1251,140 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /drip_campaigns/{drip_campaign_id}/customers:
+    parameters:
+      - $ref: '#/components/parameters/DripCampaignId'
+
+    get:
+      operationId: listDripCampaignCustomers
+      summary: List customers in a drip campaign
+      description: |
+        Returns the customers currently active in the specified drip campaign.
+        This endpoint is present in the official SDKs but not in the public docs.
+      tags: [Drip Campaigns]
+      responses:
+        '200':
+          description: List of customers in the campaign.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                    locale:
+                      type: string
+
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /drip_campaigns/{drip_campaign_id}/steps/{step_id}/customers:
+    parameters:
+      - $ref: '#/components/parameters/DripCampaignId'
+      - name: step_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The drip step's unique identifier.
+
+    get:
+      operationId: listDripCampaignStepCustomers
+      summary: List customers in a specific drip campaign step
+      description: |
+        Returns the customers currently at the specified step of a drip campaign.
+        This endpoint is present in the official SDKs but not in the public docs.
+      tags: [Drip Campaigns]
+      responses:
+        '200':
+          description: List of customers in the step.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                    locale:
+                      type: string
+
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /drips/deactivate:
+    post:
+      operationId: legacyDripsDeactivate
+      summary: Deactivate a customer from all drip campaigns (legacy)
+      description: |
+        Legacy endpoint — the Python SDK uses this path with the field `email_address`.
+        Prefer `POST /drip_campaigns/deactivate` with `recipient_address` for new integrations.
+      tags: [Drip Campaigns]
+      deprecated: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email_address]
+              properties:
+                email_address:
+                  type: string
+                  format: email
+                  description: Email address to deactivate from all campaigns.
+      responses:
+        '200':
+          description: Customer deactivated from all campaigns.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   # ── i18n ───────────────────────────────────────────────────────────────
   /i18n/pot/{tag}:
     parameters:
@@ -1707,7 +1847,15 @@ components:
       properties:
         template:
           type: string
-          description: Template ID to send.
+          description: |
+            Template ID to send. The Python SDK sends this as `email_id`;
+            the API accepts both field names.
+        email_id:
+          type: string
+          description: |
+            Alias for `template` used by the Python SDK. Prefer `template`
+            for new integrations.
+          deprecated: true
         recipient:
           $ref: '#/components/schemas/EmailRecipient'
         cc:
@@ -1724,6 +1872,13 @@ components:
           type: object
           additionalProperties: true
           description: Template data (maximum 128KB).
+        email_data:
+          type: object
+          additionalProperties: true
+          description: |
+            Alias for `template_data` used by the Python SDK. Prefer
+            `template_data` for new integrations.
+          deprecated: true
         tags:
           type: array
           items:
@@ -1779,7 +1934,15 @@ components:
       properties:
         template:
           type: string
-          description: Template ID.
+          description: |
+            Template ID. The Python SDK sends this as `template_id`;
+            the API accepts both field names.
+        template_id:
+          type: string
+          description: |
+            Alias for `template` used by the Python SDK. Prefer `template`
+            for new integrations.
+          deprecated: true
         template_data:
           type: object
           additionalProperties: true
