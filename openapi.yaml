@@ -61,6 +61,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/TemplateSummary'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       operationId: createTemplate
       summary: Create a new template
@@ -79,6 +93,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateTemplateResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /templates/{template_id}:
     parameters:
       - $ref: '#/components/parameters/TemplateId'
@@ -95,6 +123,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateSummary'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       operationId: updateTemplate
       summary: Update a specific template
@@ -113,6 +155,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       operationId: deleteTemplate
       summary: Delete a specific template
@@ -126,6 +182,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /templates/{template_id}/locales/{locale}:
     parameters:
       - $ref: '#/components/parameters/TemplateId'
@@ -143,6 +213,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateSummary'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       operationId: updateTemplateByLocale
       summary: Update a specific template by locale
@@ -161,6 +245,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       operationId: deleteTemplateLocale
       summary: Delete a specific template locale
@@ -173,6 +271,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /templates/{template_id}/locales:
     parameters:
       - $ref: '#/components/parameters/TemplateId'
@@ -195,6 +307,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddLocaleResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /templates/{template_id}/versions:
     parameters:
       - $ref: '#/components/parameters/TemplateId'
@@ -213,6 +339,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       operationId: createTemplateVersion
       summary: Create a new template version
@@ -231,6 +371,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /templates/{template_id}/locales/{locale}/versions:
     parameters:
       - $ref: '#/components/parameters/TemplateId'
@@ -250,6 +404,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       operationId: createTemplateVersionByLocale
       summary: Create a new template version for a specific locale
@@ -268,6 +436,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /templates/{template_id}/versions/{version_id}:
     parameters:
       - $ref: '#/components/parameters/TemplateId'
@@ -285,6 +467,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       operationId: updateTemplateVersion
       summary: Update a template version
@@ -304,6 +500,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /templates/{template_id}/locales/{locale}/versions/{version_id}:
     parameters:
       - $ref: '#/components/parameters/TemplateId'
@@ -322,6 +532,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       operationId: updateTemplateVersionByLocale
       summary: Update a template version by locale
@@ -340,6 +564,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TemplateVersion'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── Send ───────────────────────────────────────────────────────────────
   /send:
     post:
@@ -363,6 +601,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SendResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── Render ─────────────────────────────────────────────────────────────
   /render:
     post:
@@ -386,6 +638,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/RenderResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── Logs ───────────────────────────────────────────────────────────────
   /logs/{log_id}:
     parameters:
@@ -403,6 +669,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Log'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /logs/{log_id}/events:
     parameters:
       - $ref: '#/components/parameters/LogId'
@@ -421,6 +701,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/LogEvent'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /resend:
     post:
       operationId: resendEmail
@@ -446,6 +740,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SendResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── Snippets ───────────────────────────────────────────────────────────
   /snippets:
     get:
@@ -462,6 +770,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/Snippet'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       operationId: createSnippet
       summary: Create a new snippet
@@ -480,6 +802,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SnippetResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /snippets/{snippet_id}:
     parameters:
       - $ref: '#/components/parameters/SnippetId'
@@ -496,6 +832,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Snippet'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       operationId: updateSnippet
       summary: Update an existing snippet
@@ -514,6 +864,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SnippetResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       operationId: deleteSnippet
       summary: Delete an existing snippet
@@ -526,6 +890,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── Customers ──────────────────────────────────────────────────────────
   /customers:
     post:
@@ -555,6 +933,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /customers/{email}:
     parameters:
       - $ref: '#/components/parameters/CustomerEmail'
@@ -571,6 +963,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomerResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       operationId: deleteCustomer
       summary: Delete a customer
@@ -586,6 +992,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /customers/{email}/logs:
     parameters:
       - $ref: '#/components/parameters/CustomerEmail'
@@ -621,6 +1041,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomerLogsResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── Drip Campaigns ────────────────────────────────────────────────────
   /drip_campaigns:
     get:
@@ -637,6 +1071,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/DripCampaign'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /drip_campaigns/{drip_campaign_id}:
     parameters:
       - $ref: '#/components/parameters/DripCampaignId'
@@ -653,6 +1101,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/DripCampaign'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /drip_campaigns/{drip_campaign_id}/activate:
     parameters:
       - $ref: '#/components/parameters/DripCampaignId'
@@ -678,6 +1140,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/DripActivateResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /drip_campaigns/{drip_campaign_id}/deactivate:
     parameters:
       - $ref: '#/components/parameters/DripCampaignId'
@@ -706,6 +1182,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/DripDeactivateResponse'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /drip_campaigns/deactivate:
     post:
       operationId: deactivateAllDripCampaigns
@@ -741,6 +1231,20 @@ paths:
                   recipient_address:
                     type: string
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── i18n ───────────────────────────────────────────────────────────────
   /i18n/pot/{tag}:
     parameters:
@@ -766,6 +1270,20 @@ paths:
               schema:
                 type: string
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /i18n/po/{tag}:
     parameters:
       - name: tag
@@ -799,6 +1317,20 @@ paths:
               schema:
                 type: object
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   # ── Batch ──────────────────────────────────────────────────────────────
   /batch:
     post:
@@ -824,6 +1356,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/BatchResult'
 
+        '400':
+          description: Bad request — invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized — invalid or missing API key.
+        '404':
+          description: Not found — the requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 # ═══════════════════════════════════════════════════════════════════════════
 components:
   securitySchemes:
@@ -903,6 +1449,18 @@ components:
         status:
           type: string
           example: OK
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        status:
+          type: string
+          example: Error
+        message:
+          type: string
+          description: Human-readable error description.
 
     # ── Templates ──────────────────────────────────────────────────────
     VersionSummary:
